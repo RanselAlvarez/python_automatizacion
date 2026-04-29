@@ -1,0 +1,21 @@
+SEMANA 1: Consolida el esqueleto mental
+├─ Escribe a mano (en papel o txt) el flujo de 3 problemas simples
+├─ Practica: leer → transformar → escribir (CSV, JSON, TXT)
+├─ Enfócate en: manejo de errores (try/except), rutas relativas, logging básico
+└─ No instales librerías nuevas. Usa solo stdlib + pandas si es necesario
+
+SEMANA 2: Proyectos mínimo viables (PMV)
+├─ Crea 2 scripts que resuelvan TUS propias tareas repetitivas
+├─ Documenta en README: qué hace, cómo ejecutarlo, ejemplos
+├─ Pide a un amigo/colega que lo pruebe y te dé feedback por texto
+└─ Sube a GitHub (o compártelo por Drive si el internet falla)
+
+SEMANA 3: Primer contacto real
+├─ Ofrece en Nexempleo/grupos: "Automatizo tareas de archivos/datos con Python - $10-15 USD"
+├─ Usa plantillas de comunicación asincrónica (ej: "Te entrego X en 48h, revisamos por chat")
+└─ No prometas complejidad. Entrega código limpio + instrucciones claras.
+
+SEMANA 4: Itera y documenta
+├─ Registra: ¿qué parte te tomó más tiempo? ¿qué buscaste en Google?
+├─ Convierte esas búsquedas en tu "cheat sheet personal"
+└─ Ajusta tu oferta según lo que realmente disfrutaste y funcionó

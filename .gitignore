@@ -1,0 +1,6 @@
+# .gitignore
+.venv/
+__pycache__/
+*.pyc
+.env
+requirements.txt  # Opcional: algunos prefieren no versionarlo, pero para aprendizaje está bien incluirlo
