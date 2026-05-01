@@ -49,19 +49,26 @@ def extraer_fecha(archivos_leidos):
         # anio_mal = False
         # mes_mal = False
         
-
-        pedazos = archivo.name.split("_")
+        nombre_limpio = archivo.stem.replace("_", " ").replace("-", " ")
+        pedazos = nombre_limpio.split()
+        
         for i in pedazos:
-            if str(i).startswith("19") or str(i).startswith("20"):
-                anio.append(str(i[0:4]))
+            # Limpiamos los pedazos
+            fragmento_limpio = str(i).lower().strip(" _-.")
+            
+            # Validamos que el fragmento comience con 19 o 20
+            if fragmento_limpio.startswith("19") or fragmento_limpio.startswith("20"):
                 
-            if i.isdigit() and 1 <= int(i) <= 12:
-                if int(i) not in range(1,13):
-                    continue
-                mes.append(i[4:6])
+                # Agregamos los 4 primeros numeros a la lista anio
+                anio.append(fragmento_limpio[0:4])
+            
+            if fragmento_limpio.isdigit():
+                numero = int(fragmento_limpio)
+                if 1 <= numero <= 12:
+                    mes.append(f"{numero:02d}")
                 
-            if str(i).lower() in meses:
-                mes = meses[i]
+            if fragmento_limpio in meses:
+                mes.append(meses[fragmento_limpio])
     return anio, mes
 
 
