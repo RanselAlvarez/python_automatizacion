@@ -60,7 +60,7 @@ def extraer_fecha(archivos_leidos):
                     mes.append(f"{mes_num:02d}")
             
             # Validamos que el fragmento comience con 19 o 20
-            if texto.startswith("19") or texto.startswith("20"):
+            elif texto.startswith("19") or texto.startswith("20"):
                 if len(texto) >= 4 and texto[:4].isdigit():
                     
                     # Agregamos los 4 primeros numeros a la lista anio
@@ -88,6 +88,7 @@ def extraer_fecha(archivos_leidos):
             fecha = None
             
         resultados.append({"ruta": archivo, "estado": estado, "fecha": fecha})
+
 
 
     return resultados
