@@ -131,22 +131,47 @@ def extraer_fecha(archivos_leidos):
 # PUNTO DE ENTRADA PRINCIPAL
 # =============================================================================
 if __name__ == "__main__":
-    # Solo se ejecuta si este archivo se corre directamente.
-    # Permite importar las funciones en otros scripts sin disparar este flujo automáticamente.
+    # 📍 CONFIGURACIÓN INICIAL
+    ruta_proyecto = Path(__file__).resolve().parent.parent
+    carpeta_destino = ruta_proyecto / "facturas_organizadas"
+    archivo_errores = ruta_proyecto / "errores.txt"
 
-    # 1. Lee la carpeta y obtiene los PDFs válidos.
+    # 1. Leer y diagnosticar
     lectura_carpeta = leer_carpeta("datos/facturas_prueba")
+    diagnostico = extraer_fecha(lectura_carpeta)
 
-    # 2. Extrae y valida las fechas de cada archivo.
-    archivos_fecha = extraer_fecha(lectura_carpeta)
+    # 2. Procesar cada archivo
+    for item in diagnostico:
+        estado = item["estado"]
+        ruta_origen = item["ruta"]
+        fecha = item["fecha"]
 
-    # 3. Muestra resultados en consola para verificación.
-    print("\n--- DIAGNÓSTICO DE ARCHIVOS ---")
-    for item in archivos_fecha:
-        print(f"📄 {item['ruta'].name} | 🟢 {item['estado']} | 📅 {item['fecha']}")
+        if estado == "OK":
+            # 🔹 PASO A: Extraer año de la fecha (formato "2024-03")
+            # TODO: Obtén solo los primeros 4 caracteres de `fecha`
+            anio = fecha[:4]
 
-    # 🔜 PRÓXIMO PASO (cuando estés listo):
-    # - Crear carpetas dinámicas por año (ej: "2024/") con .mkdir(exist_ok=True)
-    # - Renombrar archivos como "AAAA-MM_nombreoriginal.pdf"
-    # - Mover los "OK" a su carpeta correspondiente con .rename() o shutil.move()
-    # - Escribir "errores.txt" con los "FALTA_DATO" y "AMBIGUO"
+            # 🔹 PASO B: Crear carpeta del año
+            # TODO: Usa .mkdir(exist_ok=True) sobre una ruta tipo carpeta_destino / año
+            carpeta = input("Ruta destino de la carpeta a crear: ")
+            carpeta_destino = Path(carpeta) / anio
+            
+            # 🔹 PASO C: Construir nuevo nombre
+            # TODO: Combina fecha + "_" + ruta_origen.name → "2024-03_nombreoriginal.pdf"
+            
+            
+            # 🔹 PASO D: Definir ruta completa de destino
+            # TODO: carpeta_año / nuevo_nombre
+            
+            # 🔹 PASO E: Mover/renombrar con seguridad
+            # TODO: Usa try/except. Dentro: ruta_origen.rename(ruta_destino)
+            #       En except: imprime error sin detener el script
+            
+        else:
+            # 🔹 REGISTRO DE ERRORES
+            # TODO: Abre `archivo_errores` en modo "a" (append) con `with open(...)`
+            # TODO: Escribe una línea clara: f"{estado} | {ruta_origen.name} | {fecha or 'Sin fecha detectada'}\n"
+            # TODO: (Opcional) Imprime en consola un aviso breve
+
+    # 3. Resumen final
+    print("\n✅ Proceso finalizado. Revisa la carpeta de destino y errores.txt si aplica.")
