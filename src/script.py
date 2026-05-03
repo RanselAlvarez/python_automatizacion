@@ -24,52 +24,73 @@ def leer_carpeta(ruta):
     # Retorno la lista de archivos PDFs
     return lista_archivos
 # --------------------------------------------------------------------------#
-
+meses = {
+        "enero": "01",
+        "febrero": "02",
+        "marzo": "03",
+        "abril": "04",
+        "mayo": "05",
+        "junio": "06",
+        "julio": "07",
+        "agosto": "08",
+        "septiembre": "09",
+        "octubre": "10",
+        "noviembre": "11",
+        "diciembre": "12"
+        }
 def extraer_fecha(archivos_leidos):
-    anio = []
-    mes = []
+    resultados = []
     
     for archivo in archivos_leidos:
-        meses = {
-            "enero": "01",
-            "febrero": "02",
-            "marzo": "03",
-            "abril": "04",
-            "mayo": "05",
-            "junio": "06",
-            "julio": "07",
-            "agosto": "08",
-            "septiembre": "09",
-            "octubre": "10",
-            "noviembre": "11",
-            "diciembre": "12"
-        }
-        
-        
-        # anio_mal = False
-        # mes_mal = False
+        anio = []
+        mes = []
         
         nombre_limpio = archivo.stem.replace("_", " ").replace("-", " ")
         pedazos = nombre_limpio.split()
         
-        for i in pedazos:
+        for fragmento in pedazos:
             # Limpiamos los pedazos
-            fragmento_limpio = str(i).lower().strip(" _-.")
+            texto = fragmento.lower().strip(" _-.")
+            
+            # 1️⃣ PRIORIDAD ALTA: Fecha compacta AAAAMMDD (8 dígitos exactos)
+            if len(texto) == 8 and texto.isdigit():
+                anio.append(texto[0:4])
+                mes_num = int(texto[4:6])
+                if 1 <= mes_num <= 12:
+                    mes.append(f"{mes_num:02d}")
             
             # Validamos que el fragmento comience con 19 o 20
-            if fragmento_limpio.startswith("19") or fragmento_limpio.startswith("20"):
-                
-                # Agregamos los 4 primeros numeros a la lista anio
-                anio.append(fragmento_limpio[0:4])
+            if texto.startswith("19") or texto.startswith("20"):
+                if len(texto) >= 4 and texto[:4].isdigit():
+                    
+                    # Agregamos los 4 primeros numeros a la lista anio
+                    anio.append(texto[:4])
             
-            if fragmento_limpio.isdigit():
-                numero = int(fragmento_limpio)
+            elif texto.isdigit():
+                numero = int(texto)
                 if 1 <= numero <= 12:
                     mes.append(f"{numero:02d}")
+
+            elif texto in meses:
+                mes.append(meses[texto])
                 
-            if fragmento_limpio in meses:
-                mes.append(meses[fragmento_limpio])
-    return anio, mes
+        # 🧠 Evaluación FINAL para ESTE archivo
+        if len(anio) == 1 and len(mes) == 1:
+            estado = "OK"
+            fecha = f"{anio[0]}-{mes[0]}"
+        
+        elif len(anio) == 0 or len(mes) == 0:
+            estado = "FALTA_DATO"
+            fecha = None
+            
+        else:
+            estado = "AMBIGUO"
+            fecha = None
+            
+        resultados.append({"ruta": archivo, "estado": estado, "fecha": fecha})
+
+
+    return resultados
 
 
 #=======================================#
@@ -84,5 +105,7 @@ if __name__ == "__main__":
         print(i)    
     
     #================================================================================#
-    archivos_sin_extension = extraer_fecha(lectura_carpeta)
-    print(archivos_sin_extension)
+    archivos_fecha = extraer_fecha(lectura_carpeta)
+    
+    for item in archivos_fecha:
+        print(f"📄 {item['ruta'].name} | 🟢 {item['estado']} | 📅 {item['fecha']}")
