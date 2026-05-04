@@ -155,16 +155,16 @@ if __name__ == "__main__":
 
             # 🔹 PASO B: Crear carpeta del año
             # TODO: Usa .mkdir(exist_ok=True) sobre una ruta tipo carpeta_destino / año
-            carpeta_destino = Path(carpeta_destino / anio)
-            carpeta_destino.mkdir(parents=True, exist_ok=True)
+            carpeta_anio = Path(carpeta_destino / anio)
+            carpeta_anio.mkdir(parents=True, exist_ok=True)
             
             # 🔹 PASO C: Construir nuevo nombre
             # TODO: Combina fecha + "_" + ruta_origen.name → "2024-03_nombreoriginal.pdf"
-            nombre_archivo_final = str(fecha + "_" + ruta_origen.name)
+            nombre_archivo_final = carpeta_anio / f"{fecha}_{ruta_origen.name}"
             
             # 🔹 PASO D: Definir ruta completa de destino
             # TODO: carpeta_año / nuevo_nombre
-            shutil.copy(ruta_origen, carpeta_destino)
+            shutil.copy(ruta_origen, nombre_archivo_final)
             
             # 🔹 PASO E: Mover/renombrar con seguridad
             # TODO: Usa try/except. Dentro: ruta_origen.rename(ruta_destino)
