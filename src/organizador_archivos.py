@@ -20,21 +20,27 @@ def identificar_archivos(ruta_origen):
             continue # Ignora subcarpetas
         
         extension = archivo.suffix.lower()
-        
+
+        timestamp = archivo.stat().st_mtime
+        fecha_obj = datetime.fromtimestamp(timestamp)
+        fecha_str = fecha_obj.strftime("%Y-%m")  # Formato: 2024-05
+
+
+
         if extension in musica: 
-            resultados.append({"ruta": archivo, "categoria": "musica"})
+            resultados.append({"ruta": archivo, "categoria": "musica", "fecha_modificacion": fecha_str})
         
         elif extension in video:
-            resultados.append({"ruta": archivo, "categoria": "video"})
+            resultados.append({"ruta": archivo, "categoria": "video", "fecha_modificacion": fecha_str})
         
         elif extension in documentos:
-            resultados.append({"ruta": archivo, "categoria": "documentos"})
+            resultados.append({"ruta": archivo, "categoria": "documentos", "fecha_modificacion": fecha_str})
         
         elif extension in imagen:
-            resultados.append({"ruta": archivo, "categoria": "imagen"})
+            resultados.append({"ruta": archivo, "categoria": "imagen", "fecha_modificacion": fecha_str})
 
         else:
-            resultados.append({"ruta": archivo, "categoria": "Otros"})
+            resultados.append({"ruta": archivo, "categoria": "Otros", "fecha_modificacion": fecha_str})
             
     # Resultados retorna una lista con diccionarios que contienen la ruta y la categoría de cada archivo
     return resultados
@@ -45,9 +51,14 @@ def mover_archivos(ruta_destino, archivos_identificados):
     
     for archivo in archivos_identificados:
         carpeta_categoria = ruta_destino/ str(archivo["categoria"])
-        
+
+        nombre_archivo = archivo["ruta"].stem
+        fecha_archivo = archivo["fecha_modificacion"]
+
+        nombre_con_fecha = f"{nombre_archivo}_{fecha_archivo}"
+
         carpeta_categoria.mkdir(parents=True, exist_ok=True)
-        shutil.copy(archivo["ruta"], carpeta_categoria)
+        shutil.copy(ruta_origen, carpeta_categoria/nombre_con_fecha)
         
         nombre_archivo = archivo["ruta"].name
 
